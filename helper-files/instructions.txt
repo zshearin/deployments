@@ -1,0 +1,25 @@
+1. Run storage class script (setup-cephfs.sh)
+
+2. Make PVs in env (mkpv-fyre.sh)
+
+3. Deploy minio (deploy-minio.sh)
+
+4. Create secret in this directory
+
+5. Create all of the thanos related yaml in the environments/base/manifests folder
+oc create -f environments/base/manifests/thanos
+
+
+#Test and see data flowing
+5. deploy collector branch fake-data - just generates four fake metrics and sends to thanos
+  Make sure the collector write url is set to send to the right thing.  Right now I have it set to this because I am writing to the thanos receive component directly:
+  http://observatorium-xyz-thanos-receive.observatorium.svc.cluster.local:19291/api/v1/receive
+
+
+
+
+6. expose thanos querier with command like this:
+oc -n observatorium expose service observatorium-xyz-thanos-query --port 9090 --hostname=thanosquery.<url of system>
+
+7. Go to hostname url and see metrics flowing 
+
